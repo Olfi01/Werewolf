@@ -1950,4 +1950,13 @@
   <string key="Back">
 	<value>Back</value>
   </string>
+  <string key="ShufflePlayerList">
+    <value>Shuffle Player List</value>
+  </string>
+  <string key="ShufflePlayerListQ">
+    <value>Shuffle player list every time? Current: {0}</value>
+  </string>
+  <string key="ShufflePlayerListA">
+    <value>Player list will be shuffled every time: {0}</value>
+  </string>
 </strings>

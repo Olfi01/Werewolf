@@ -55,8 +55,9 @@ namespace Werewolf_Node
         private List<int> _joinButtons = new List<int>();
         private int _playerListId = 0;
         public bool RandomMode = false;
-        public bool ShowRolesOnDeath, AllowTanner, AllowFool, AllowCult, SecretLynch, ShowIDs, AllowNSFW, AllowThief, ThiefFull;
+        public bool ShowRolesOnDeath, AllowTanner, AllowFool, AllowCult, SecretLynch, ShowIDs, AllowNSFW, AllowThief, ThiefFull, FullCupid;
         public bool SecretLynchShowVoters, SecretLynchShowVotes;
+        public bool ShufflePlayerList;
         public string ShowRolesEnd;
 
         public List<string> VillagerDieImages,
@@ -158,7 +159,9 @@ namespace Werewolf_Node
 #endif
                     DbGroup.UpdateFlags();
                     ShowIDs = DbGroup.HasFlag(GroupConfig.ShowIDs);
+                    ShufflePlayerList = DbGroup.HasFlag(GroupConfig.ShufflePlayerList);
                     RandomMode = DbGroup.HasFlag(GroupConfig.RandomMode);
+                    FullCupid = DbGroup.HasFlag(GroupConfig.FullCupid);
                     db.SaveChanges();
                     if (RandomMode)
                     {
@@ -1038,7 +1041,7 @@ namespace Werewolf_Node
                             AddAchievement(player, Achievements.SelfLoving);
                         lover1.InLove = true;
                         //send menu for second choice....
-                        var secondChoices = Players.Where(x => !x.IsDead && x.Id != lover1.Id).ToList();
+                        var secondChoices = Players.Where(x => !x.IsDead && x.Id != lover1.Id && !x.InLove).ToList();
                         var buttons =
                             secondChoices.Select(
                                 x => new[] { new InlineKeyboardCallbackButton(x.Name, $"vote|{Program.ClientId}|{Guid}|{(int)QuestionType.Lover2}|{x.Id}") }).ToList();
@@ -1324,7 +1327,7 @@ namespace Werewolf_Node
 
         private void SendPlayerList(bool joining = false)
         {
-            if (!_playerListChanged) return;
+            if (!_playerListChanged && (!ShufflePlayerList || joining)) return;
             if (Players == null) return;
             try
             {
@@ -1338,17 +1341,34 @@ namespace Werewolf_Node
                     }
                     else
                     {
-                        //Thread.Sleep(4500); //wait a moment before sending
                         LastPlayersOutput = DateTime.Now;
                         msg =
-                            $"{GetLocaleString("PlayersAlive")}: {Players.Count(x => !x.IsDead)}/{Players.Count}\n" +
-                            Players.OrderBy(x => x.TimeDied)
+                            $"{GetLocaleString("PlayersAlive")}: {Players.Count(x => !x.IsDead)}/{Players.Count}\n";
+                        if (ShufflePlayerList)
+                        {
+                            msg += Players.Where(x => x.IsDead).OrderBy(x => x.TimeDied)
                                 .Aggregate("",
                                     (current, p) =>
                                         current +
-                                        ($"{p.GetName(dead: p.IsDead)}: {(p.IsDead ? ((p.Fled ? GetLocaleString("RanAway") : GetLocaleString("Dead")) + (DbGroup.HasFlag(GroupConfig.ShowRolesDeath) ? " - " + GetDescription(p.PlayerRole) + (p.InLove ? "❤️" : "") : "")) : GetLocaleString("Alive"))}\n"));
-                        //{(p.HasUsedAbility & !p.IsDead && new[] { IRole.Prince, IRole.Mayor, IRole.Gunner, IRole.Blacksmith }.Contains(p.PlayerRole) ? " - " + GetDescription(p.PlayerRole) : "")}  //OLD CODE SHOWING KNOWN ROLES
+                                        p.GetName(dead: true) + ": " + (p.Fled ? GetLocaleString("RanAway") : GetLocaleString("Dead")) + (DbGroup.HasFlag(GroupConfig.ShowRolesDeath) ? " - " + GetDescription(p.PlayerRole) + (p.InLove ? "❤️" : "") : "") + "\n");
 
+                            msg += Players.Where(x => !x.IsDead).OrderBy(x => Program.R.Next())
+                                .Aggregate("",
+                                    (current, p) =>
+                                        current +
+                                        p.GetName() + ": " + GetLocaleString("Alive") + "\n");
+                        }
+                        else
+                        {
+                            //Thread.Sleep(4500); //wait a moment before sending
+                             msg +=
+                                Players.OrderBy(x => x.TimeDied)
+                                    .Aggregate("",
+                                        (current, p) =>
+                                            current +
+                                            ($"{p.GetName(dead: p.IsDead)}: {(p.IsDead ? ((p.Fled ? GetLocaleString("RanAway") : GetLocaleString("Dead")) + (DbGroup.HasFlag(GroupConfig.ShowRolesDeath) ? " - " + GetDescription(p.PlayerRole) + (p.InLove ? "❤️" : "") : "")) : GetLocaleString("Alive"))}\n"));
+                            //{(p.HasUsedAbility & !p.IsDead && new[] { IRole.Prince, IRole.Mayor, IRole.Gunner, IRole.Blacksmith }.Contains(p.PlayerRole) ? " - " + GetDescription(p.PlayerRole) : "")}  //OLD CODE SHOWING KNOWN ROLES
+                        }
                     }
                     _playerListChanged = false;
                     SendWithQueue(new Message(msg) { PlayerList = true, Joining = joining });
@@ -4965,7 +4985,10 @@ namespace Werewolf_Node
             {
                 player.CurrentQuestion = null;
                 player.Choice = 0;
-                var choices = Players.Where(x => !x.IsDead && x.Id != player.Id).Select(x => new[] { new InlineKeyboardCallbackButton(x.Name, $"vote|{Program.ClientId}|{Guid}|{(int)QuestionType.Lynch}|{x.Id}") }).ToList();
+                var possibleChoices = Players.Where(x => !x.IsDead && x.Id != player.Id).ToList();
+                if (ShufflePlayerList)
+                    possibleChoices.Shuffle();
+                var choices = possibleChoices.Select(x => new[] { new InlineKeyboardCallbackButton(x.Name, $"vote|{Program.ClientId}|{Guid}|{(int)QuestionType.Lynch}|{x.Id}") }).ToList();
                 SendMenu(choices, player, GetLocaleString("AskLynch"), QuestionType.Lynch);
                 Thread.Sleep(100);
             }
@@ -5039,6 +5062,8 @@ namespace Werewolf_Node
                 var options = Players.Where(x => !x.IsDead && x.Id != detective.Id).ToList();
                 if (options.Any())
                 {
+                    if (ShufflePlayerList)
+                        options.Shuffle();
                     var choices = options.Select(x => new[] { new InlineKeyboardCallbackButton(x.Name, $"vote|{Program.ClientId}|{Guid}|{(int)QuestionType.Detect}|{x.Id}") }).ToList();
                     choices.Add(new[] { new InlineKeyboardCallbackButton(GetLocaleString("Skip"), $"vote|{Program.ClientId}|{Guid}|{(int)QuestionType.Detect}|-1") });
                     SendMenu(choices, detective, GetLocaleString("AskDetect"), QuestionType.Detect);
@@ -5108,6 +5133,8 @@ namespace Werewolf_Node
                     var options = Players.Where(x => !x.IsDead && x.Id != gunner.Id).ToList();
                     if (options.Any())
                     {
+                        if (ShufflePlayerList)
+                            options.Shuffle();
                         var choices = options.Select(x => new[] { new InlineKeyboardCallbackButton(x.Name, $"vote|{Program.ClientId}|{Guid}|{(int)QuestionType.Shoot}|{x.Id}") }).ToList();
                         choices.Add(new[] { new InlineKeyboardCallbackButton(GetLocaleString("Skip"), $"vote|{Program.ClientId}|{Guid}|{(int)QuestionType.Shoot}|-1") });
                         SendMenu(choices, gunner, GetLocaleString("AskShoot", gunner.Bullet), QuestionType.Shoot);
@@ -5123,6 +5150,8 @@ namespace Werewolf_Node
                 var options = Players.Where(x => !x.IsDead && x.Id != spumpkin.Id).ToList();
                 if (options.Any())
                 {
+                    if (ShufflePlayerList)
+                        options.Shuffle();
                     var choices = options.Select(x => new[] { new InlineKeyboardCallbackButton(x.Name, $"vote|{Program.ClientId}|{Guid}|{(int)QuestionType.Shoot}|{x.Id}") }).ToList();
                     choices.Add(new[] { new InlineKeyboardCallbackButton(GetLocaleString("Skip"), $"vote|{Program.ClientId}|{Guid}|{(int)QuestionType.Shoot}|-1") });
                     SendMenu(choices, spumpkin, GetLocaleString("AskDetonate"), QuestionType.Shoot);
@@ -5239,9 +5268,9 @@ namespace Werewolf_Node
                         break;
                     case IRole.Cupid:
                         //this is a bit more difficult....
-                        if (GameDay == 1)
+                        if (GameDay == 1 || (FullCupid && Players.Count(x => !x.InLove && !x.IsDead) > 1))
                         {
-                            targets = Players.Where(x => !x.IsDead).ToList();
+                            targets = Players.Where(x => !x.IsDead && !x.InLove).ToList();
                             msg = GetLocaleString("AskCupid1");
                             qtype = QuestionType.Lover1;
                         }
@@ -5287,6 +5316,9 @@ namespace Werewolf_Node
                     player.Choice = -1;
                     continue;
                 }
+
+                if (ShufflePlayerList)
+                    targets.Shuffle();
 
                 var buttons = targets.Select(x => new[] { new InlineKeyboardCallbackButton(x.Name, $"vote|{Program.ClientId}|{Guid}|{(int)qtype}|{x.Id}") }).ToList();
                 if ((player.PlayerRole != IRole.WildChild && player.PlayerRole != IRole.Cupid && player.PlayerRole != IRole.Doppelgänger && player.PlayerRole != IRole.Thief) || (player.PlayerRole == IRole.Thief && ThiefFull))
@@ -5389,7 +5421,10 @@ namespace Werewolf_Node
 
             //send a menu to the hunter, asking who he wants to kill as he is hung....
             var hunterChoices = new List<InlineKeyboardCallbackButton[]>();
-            hunterChoices.AddRange(Players.Where(x => !x.IsDead).Select(x => new[] { new InlineKeyboardCallbackButton(x.Name, $"vote|{Program.ClientId}|{Guid}|{(int)QuestionType.HunterKill}|{x.Id}") }));
+            var possibleTargets = Players.Where(x => !x.IsDead).ToList();
+            if (ShufflePlayerList)
+                possibleTargets.Shuffle();
+            hunterChoices.AddRange(possibleTargets.Select(x => new[] { new InlineKeyboardCallbackButton(x.Name, $"vote|{Program.ClientId}|{Guid}|{(int)QuestionType.HunterKill}|{x.Id}") }));
             hunterChoices.Add(new[] { new InlineKeyboardCallbackButton(GetLocaleString("Skip"), $"vote|{Program.ClientId}|{Guid}|{(int)QuestionType.HunterKill}|-1") });
 
             //raise hunter from dead long enough to shoot
