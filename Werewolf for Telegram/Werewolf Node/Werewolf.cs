@@ -1611,8 +1611,11 @@ namespace Werewolf_Node
                 IRole[] requiredRoles = new IRole[]
                 {
                     IRole.Wolf,
-                    IRole.Seer,
-                    IRole.Hunter
+                    IRole.GraveDigger,
+                    IRole.Augur,
+                    IRole.Arsonist,
+                    IRole.Harlot,
+                    IRole.SerialKiller
                 };
                 int requiredCount = requiredRoles.Length;
 
