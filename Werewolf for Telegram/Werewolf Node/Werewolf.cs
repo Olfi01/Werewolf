@@ -1652,12 +1652,7 @@ Aku adalah kunang-kunang, dan kau adalah senja, dalam gelap kita berbagi, dalam 
                 IRole[] requiredRoles = new IRole[]
                 {
                     IRole.Wolf,
-                    IRole.GraveDigger,
-                    IRole.Augur,
-                    IRole.Arsonist,
-                    IRole.Harlot,
-                    IRole.SerialKiller,
-                    IRole.GuardianAngel
+                    IRole.GraveDigger
                 };
                 int requiredCount = requiredRoles.Length;
 
