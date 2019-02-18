@@ -1615,7 +1615,8 @@ namespace Werewolf_Node
                     IRole.Augur,
                     IRole.Arsonist,
                     IRole.Harlot,
-                    IRole.SerialKiller
+                    IRole.SerialKiller,
+                    IRole.GuardianAngel
                 };
                 int requiredCount = requiredRoles.Length;
 
