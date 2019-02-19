@@ -638,7 +638,7 @@ Aku adalah kunang-kunang, dan kau adalah senja, dalam gelap kita berbagi, dalam 
 
                     GameId = db.Games.Where(x => x.GroupId == ChatId).OrderByDescending(x => x.Id).FirstOrDefault()?.Id ?? 0;
 
-                    db.Database.ExecuteSqlCommand($"DELETE FROM NotifyGames WHERE GroupId = {ChatId}");
+                    db.Database.ExecuteSqlCommand($"DELETE FROM NotifyGame WHERE GroupId = {ChatId}");
                 }
                 IsInitializing = false;
 
