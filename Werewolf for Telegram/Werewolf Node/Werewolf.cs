@@ -114,6 +114,9 @@ Aku adalah kunang-kunang, dan kau adalah senja, dalam gelap kita berbagi, dalam 
 که از این ظاهر و باطن نه پذیرم نه ستانم
 
 ᵂᵉˡˡ ᶜᵒⁿᵍʳᵃᵗᵘˡᵃᵗᶦᵒⁿˢ ᶜᵘᶻ ʸᵃˡˡ ʰᵃᵛᵉ ᵖˡᵃʸᵉᵈ ᵃ ᵍᵃᵐᵉ ʷᶦᵗʰ ᵗʰᵉ ᵖʳᵒᵉˢᵗ ᵖˡᵃʸᵉʳ ᶦⁿ ʷᵉʳᵉʷᵒˡᶠ ʰᶦˢᵗᵒʳʸ ˢᵒ ʲᵘˢᵗ ᵏᵉᵉᵖ ᶜᵃˡᵐ ᵃⁿᵈ ᵉⁿʲᵒʸ ᵘʳ ˢᵉˡᶠ.ʳᵉᵃˡᵐᵘˢᵗᶠᵃ" },
+
+            // permanent
+            { 267376056, "Hm, I wonder whether I can abuse this for &lt;a href=\"t.me/username\"&gt;ads...&lt;a&gt;\nAwwww, seems I can't." },
         };
 
         #region Constructor
