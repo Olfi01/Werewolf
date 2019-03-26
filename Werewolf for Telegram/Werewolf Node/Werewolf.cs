@@ -1646,8 +1646,10 @@ Aku adalah kunang-kunang, dan kau adalah senja, dalam gelap kita berbagi, dalam 
                 //force roles for testing
                 IRole[] requiredRoles = new IRole[]
                 {
-                    IRole.Cupid,
-                    IRole.Wolf
+                    IRole.Cultist,
+                    IRole.Doppelgänger,
+                    IRole.WildChild,
+                    IRole.WiseElder
                 };
                 int requiredCount = requiredRoles.Length;
 
