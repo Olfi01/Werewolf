@@ -34,20 +34,20 @@ namespace Werewolf_Node
         internal static List<string> SerialKillerWins = new List<string> { "BQADBAADdQMAAsEcZAd7skaRqoWKzQI", "BQADBAADmgMAArgcZAdPyqayfRT6bQI", "BQADBAADOAQAAqUXZAeeuV5vjRd6QAI", "BQADBAADKwMAAsQZZAfwd2_EAeeOTgI" };
         internal static List<string> LoversWin = new List<string> { "BQADBAAD8hUAAhYYZAeHmbRRzioXXQI", "BQADBAADYAMAAkMdZAfR4qo8c95FGgI" };
 #elif RELEASE
-        internal static List<string> VillagerDieImages = new List<string> { "BQADAwADggADdBexB2aZTAMpXRGUAg", "BQADBAADKgMAAoMbZAfmSqOE1YY-9wI", "BQADBAADWAMAAt4cZAe6rGbV3KvLggI" };
-        internal static List<string> WolfWin = new List<string> { "BQADAwADgAADdBexB015e-EU6O9CAg", "BQADAwADgQADdBexB9ksBD5NOWQvAg" };
-        internal static List<string> WolvesWin = new List<string> { "BQADBAADlwMAAtgaZAfCK5MVLj27CwI", "BQADBAADcAMAAn8ZZAe0Xjey6zCmQwI" };
-        internal static List<string> VillagersWin = new List<string> { "BQADAwADgwADdBexB2K0cDWari8QAg" };
-        internal static List<string> NoWinner = new List<string> { "BQADBAAD8QgAAqIeZAeufUVx9eT3SgI", "BQADBAADuAMAAlUXZAfNGmq-KVN_0AI" };
-        internal static List<string> StartGame = new List<string> { "BQADAwADhAADdBexB3lX1nJOQOdEAg", "BQADBAADwg0AAu0XZAcUNBLuEjnBhgI" };
-        internal static List<string> StartChaosGame = new List<string> { "BQADBAAD7wYAAgcYZAei_MiVQcRUIAI", "BQADBAAD_wcAAiUYZAeV5N-hkeMW0QI" };
-        internal static List<string> TannerWin = new List<string> { "BQADBAADQwgAAuQaZAcWZKq6Zm4NJAI", "BQADBAAD_gMAAtgaZAeJOVus4yf3RAI" };
-        internal static List<string> CultWins = new List<string> { "BQADBAADWAMAAosYZAf5H-sYZ53nMwI", "BQADBAADHwsAAgUYZAeDkYYi5N3cIgI" };
-        internal static List<string> SerialKillerWins = new List<string> { "BQADBAADKwMAAsQZZAf4t254zcOVdgI", "BQADBAADOAQAAqUXZAdnNEO6TaxtnQI", "BQADBAADdQMAAsEcZAfkYMOxn9xzBAI", "BQADBAADmgMAArgcZAfW46sJoTg9VQI" };
-        internal static List<string> LoversWin = new List<string> { "BQADBAAD8hUAAhYYZAeSI-kDTlm6QAI", "BQADBAADYAMAAkMdZAesBzPWN8zN3QI" };
-        internal static List<string> SKKilled = new List<string> { "CgADBAADNZ8AAu0XZAepE6Tr-3cwqwI", "CgADBAADfvgAAtUaZAez5beJq0aQCwI" };
-        public static List<string> ArsonistWins = new List<string> { "CgADBAADuwADTz49UyU3-izOU7GQAg" };
-        public static List<string> BurnToDeath = new List<string> { "CgADBAADqwADa589UzqdNOcbsox_Ag" };
+        internal static List<string> VillagerDieImages = new List<string> { "CgADBAADwg0AAu0XZAdP7it5M71v-QI" };
+        internal static List<string> WolfWin = new List<string> { "CgADBAADwg0AAu0XZAdP7it5M71v-QI" };
+        internal static List<string> WolvesWin = new List<string> { "CgADBAADwg0AAu0XZAdP7it5M71v-QI" };
+        internal static List<string> VillagersWin = new List<string> { "CgADBAADwg0AAu0XZAdP7it5M71v-QI" };
+        internal static List<string> NoWinner = new List<string> { "CgADBAADwg0AAu0XZAdP7it5M71v-QI" };
+        internal static List<string> StartGame = new List<string> { "CgADBAADwg0AAu0XZAdP7it5M71v-QI" };
+        internal static List<string> StartChaosGame = new List<string> { "CgADBAADwg0AAu0XZAdP7it5M71v-QI" };
+        internal static List<string> TannerWin = new List<string> { "CgADBAADwg0AAu0XZAdP7it5M71v-QI" };
+        internal static List<string> CultWins = new List<string> { "CgADBAADwg0AAu0XZAdP7it5M71v-QI" };
+        internal static List<string> SerialKillerWins = new List<string> { "CgADBAADwg0AAu0XZAdP7it5M71v-QI" };
+        internal static List<string> LoversWin = new List<string> { "CgADBAADwg0AAu0XZAdP7it5M71v-QI" };
+        internal static List<string> SKKilled = new List<string> { "CgADBAADwg0AAu0XZAdP7it5M71v-QI" };
+        public static List<string> ArsonistWins = new List<string> { "CgADBAADwg0AAu0XZAdP7it5M71v-QI" };
+        public static List<string> BurnToDeath = new List<string> { "CgADBAADwg0AAu0XZAdP7it5M71v-QI" };
 
 #else
         public static List<string> VillagerDieImages = new List<string> { "BQADAwADggADdBexBxVNNy-rt--bAg", "BQADBAADWAMAAt4cZAfbY0WobzNPwAI", "BQADBAADKgMAAoMbZAc7Ldme4T3DKQI" };
